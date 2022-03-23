@@ -1,4 +1,4 @@
-module Home-task-serverless
+module runtime
 
 go 1.17
 
