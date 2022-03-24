@@ -6,6 +6,8 @@ Use pulsar-client-go to achieve producer and consumer. With the usage of corouti
 
 Also, the usage of `cli`, a golang package to get commands more standard. 
 
+> You can change pulsar url if needed in main function
+
 To compile it, you can run the command below:
 
 ```bash
@@ -15,7 +17,7 @@ go build runtime.go
 When the compile of runtime is done, you can run the command like below:
 
 ```bash
-./runtime -t test -s reverse -m please
+./runtime -t test -s reverse -i "/dev/stdin" -o "/dev/stdout"
 ```
 
 The command above is to produce a "please" message to "test" topic and consumed with the function "reverse" and it can be seen in terminal. 
