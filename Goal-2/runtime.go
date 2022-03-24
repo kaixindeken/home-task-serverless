@@ -21,7 +21,7 @@ func CreateProducer(client pulsar.Client, topic string, inputPath string) {
 		log.Fatal(err)
 	}
 
-	b, err := ioutil.ReadFile(inputPath) // just pass the file name
+	b, err := ioutil.ReadFile(inputPath)
 	if err != nil {
 		fmt.Println("Failed to publish InputPath: ", err)
 	}

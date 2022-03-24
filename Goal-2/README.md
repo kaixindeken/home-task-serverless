@@ -6,12 +6,12 @@ Use pulsar-client-go to achieve producer and consumer. With the usage of corouti
 
 Also, the usage of `cli`, a golang package to get commands more standard. 
 
-> You can change pulsar url if needed in main function
+> You can change pulsar url if needed at main function, in `runtime.go` file
 
 To compile it, you can run the command below:
 
 ```bash
-go build runtime.go
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o runtime *.go
 ```
 
 When the compile of runtime is done, you can run the command like below:

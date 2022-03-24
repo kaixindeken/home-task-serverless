@@ -11,10 +11,6 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o runtime *.go
 
 FROM alpine:3.15
-ENV TOPIC=""
-ENV SCRIPT=""
-ENV INPUT=""
-ENV OUTPUT=""
 WORKDIR /root
 COPY functions .
 COPY --from=builder /go/src/runtime .
