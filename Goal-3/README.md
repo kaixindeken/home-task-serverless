@@ -18,16 +18,21 @@ To start the container, you can create a consumer:
 docker run --rm -v /path/to/dev:/dev runtime -c -t=test -s=reverse
 ```
 
-or a producer:
+With Topic `test` and consuming script `reverse`.
+
+Or a producer:
 
 ```bash
 docker run --rm -v /path/to/dev:/dev runtime -p -t=test
 ```
 
+With Topic `test`.
 
-> You also can customize your input and output file path.
+>The input message was taken in /dev/stdin
+>
+>The output message was taken in /dev/stdout
 
-Related image is now uploaded to docker hub, and it can be pulled with command below 
+Related image is now uploaded to docker hub, and it can be pulled with command below: 
 ```bash
 docker pull kaixindeken/runtime
 ```

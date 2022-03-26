@@ -8,7 +8,6 @@
 * pulsar client golang
 * file io with `ioutil`
 * terminal parameter management with `cli`
-* coroutine
 
 ### Goal 3
 * Dockerfile syntax
