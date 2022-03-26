@@ -14,10 +14,16 @@ To compile it, you can run the command below:
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o runtime *.go
 ```
 
-When the compile of runtime is done, you can run the command like below:
+When the compile of runtime is done, you can create a consumer:
 
 ```bash
-./runtime -t test -s reverse -i "/dev/stdin" -o "/dev/stdout"
+./runtime -c -t=test -s=reverse
+```
+
+or a producer:
+
+```bash
+./runtime -p -t=test
 ```
 
 The command above is to produce a "please" message to "test" topic and consumed with the function "reverse" and it can be seen in terminal. 

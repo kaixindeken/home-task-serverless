@@ -12,11 +12,18 @@ To build the image, you can run the command below:
 docker build -t runtime .
 ```
 
-To start the container, you can run the command below:
+To start the container, you can create a consumer:
 
 ```bash
-docker run --rm -v /path/to/dev:/dev runtime -t=test -s=addEM -i=/dev/stdin -o=/dev/stdout
+docker run --rm -v /path/to/dev:/dev runtime -c -t=test -s=reverse
 ```
+
+or a producer:
+
+```bash
+docker run --rm -v /path/to/dev:/dev runtime -p -t=test
+```
+
 
 > You also can customize your input and output file path.
 
