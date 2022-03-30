@@ -2,7 +2,7 @@
 
 > Build a BASH runtime
 
-Use pulsar-client-go to achieve producer and consumer.
+Use channel to go through, from reading file, producing to input topic, to consuming message, and producing to output topic.
 
 Also, the usage of `cli`, a golang package to get commands achieve with more choices.
 
