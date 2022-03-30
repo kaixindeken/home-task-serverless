@@ -4,34 +4,33 @@
 
 Use pulsar-client-go to achieve producer and consumer.
 
-Also, the usage of `cli`, a golang package to get commands achieve with more choices. 
+Also, the usage of `cli`, a golang package to get commands achieve with more choices.
 
-> You can change pulsar url if needed at main function, in `runtime.go` file
-
-To compile it for linux, you can run the command below:
+You can use the existed executable file if you platform matched:
 
 ```bash
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o runtime *.go
-```
+# for linux amd64 platform
+./runtime_linux_amd64 -i=input -o=output -s=reverse
 
-When compile is done, you can create a consumer:
+# for macos intel platform
+./runtime_macos_intel -i=input -o=output -s=reverse
+```
+With input topic `input`, output topic `output` and consuming script `reverse`.
+
+To compile it, please make sure to get your `broker` and input `filePath` correct:
 
 ```bash
-./runtime -c -t=test -s=reverse
+go build -a -o runtime *.go
 ```
-With Topic `test` and consuming script `reverse`.
 
-Or a producer :
+When compile is done, you run it:
 
 ```bash
-./runtime -p -t=test
+# if linux amd64 platform
+./runtime -i=input -o=output -s=reverse
 ```
 
-With Topic `test`.
-
->The input message was taken in /dev/stdin
->
->The output message was taken in /dev/stdout
+> The input message was taken in /dev/stdin
 
 To learn more about `runtime`, please run the command below:
 

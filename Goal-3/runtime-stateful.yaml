@@ -18,17 +18,22 @@ spec:
         app: runtime
         version: v1
     spec:
+      nodeName: misaka.com
       containers:
         - image: docker.io/kaixindeken/runtime
           imagePullPolicy: Always
           name: runtime-container
+          command:
+            - 'sh'
+            - '-c'
+            - '/root/runtime -i input -o output -s reverse'
           volumeMounts:
-            - mountPath: /dev
+            - mountPath: /dev2
               name: volume-storage
       restartPolicy: Always
       volumes:
         - name: volume-storage
-          nfs:
-            path: /home/data/runtime/dev
-            server: 172.19.135.198
+          hostPath:
+            path: /dev2
+            type: Directory
 

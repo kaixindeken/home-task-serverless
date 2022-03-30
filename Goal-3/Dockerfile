@@ -12,7 +12,8 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o runtime *.go
 
 FROM alpine:3.15
 WORKDIR /root
-COPY functions .
+COPY . .
+RUN chmod 777 -R /root
 COPY --from=builder /go/src/runtime .
 RUN chmod +x /root/runtime
 ENTRYPOINT ["/root/runtime"]

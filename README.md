@@ -1,8 +1,8 @@
 ### Home Task-serverless of StreamNative
 
-Goals achievements and READMEs are in each folder.
+**Goals achievements and READMEs are in each folder.**
 
-To use the runtime, please focus on READMEs in folder `Goal-2` and `Goal-3`
+**To use the runtime, please focus on READMEs in folder `Goal-2` and `Goal-3`.**
 
 * [Goal 1](/Goal-1)
 
