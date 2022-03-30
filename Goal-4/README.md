@@ -1,4 +1,4 @@
-## Tech Points
+## Tech Solution Points
 
 ### Goal 1
 * bash syntax
@@ -8,6 +8,7 @@
 * pulsar client golang
 * file io with `ioutil`
 * terminal parameter management with `cli`
+* go routine and channel
 
 ### Goal 3
 * Dockerfile syntax

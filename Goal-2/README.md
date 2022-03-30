@@ -26,7 +26,6 @@ go build -a -o runtime *.go
 When compile is done, you run it:
 
 ```bash
-# if linux amd64 platform
 ./runtime -i=input -o=output -s=reverse
 ```
 

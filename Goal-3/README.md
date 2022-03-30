@@ -36,3 +36,5 @@ To run it in kubernetes, please make sure to get your params correct, you can ru
 ```bash
 kubectl apply -f runtime-stateful.yaml 
 ```
+
+To deploy it, please make sure to get your params in .yaml file correct
