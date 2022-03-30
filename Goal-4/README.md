@@ -12,4 +12,4 @@
 
 ### Goal 3
 * Dockerfile syntax
-* K8S yaml syntax
+* Kubernetes yaml syntax
