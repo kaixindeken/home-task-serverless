@@ -34,7 +34,7 @@
 
     * Usage
       ```bash
-      ./runtime_linux_amd64 -i=input -o=output -s=reverse
+      ./runtime_linux_amd64 -c=config.js
       ```
       [Click here](/Goal-2/README.md) to reach the detail of usage
 
@@ -57,7 +57,7 @@
      ```
   * Usage
     ```bash
-    docker run --rm -v /path/to/dev:/dev2 kaixindeken/runtime -i=input -o=output -s=reverse
+    docker run --rm -v /path/to/dev:/dev2 kaixindeken/runtime -c=config.js
     ```
     ```bash
     kubectl apply -f runtime-stateful.yaml

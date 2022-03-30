@@ -1,0 +1,9 @@
+{
+  "broker":"pulsar://172.17.0.2:6650",
+  "input_file_path":"/dev2/stdin",
+  "function_root":"./functions/",
+
+  "input_topic": "input",
+  "output_topic": "output",
+  "script": "reverse"
+}

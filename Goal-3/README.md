@@ -4,7 +4,7 @@
 
 Using Docker to compile and build docker image for runtime
 
-> You can change broker if needed at the beginning in `runtime.go` file
+You may change broker if needed at the beginning in `runtime.go` file
 
 To build the image, you can run the command below:
 
@@ -14,14 +14,22 @@ docker build -t runtime .
 
 To start the container, you run it by:
 
-> because `/dev` almost exist in every linux container,
-> so it will be great to mount your path of dev to `/dev2` in container 
+> You can customize the mount dev folder and config.json file freely
 
 ```bash
-docker run --rm -v /path/to/dev:/dev2 kaixindeken/runtime -i=input -o=output -s=reverse
+docker run --rm -v /path/to/dev:/dev2 -v /path/to/config.json:/root/config.json kaixindeken/runtime -c=/root/config.json
 ```
 
-With input topic `input`, output topic `output` and consuming script `reverse`.
+The structure of config.json can refer to config.json.example:
+
+| Parameters      | Detail                                          |
+|-----------------|-------------------------------------------------|
+| broker          | pulsar url                                      |
+| input_file_path | path of message input source                    |
+| FunctionRoot    | folder of functions                             |
+| input_topic     | topic get input message                         |
+| output_topic    | topic get output message                        |
+| script          | function in functions folder to consume message |
 
 > The input message was taken in /dev/stdin in container
 
@@ -33,8 +41,9 @@ docker pull kaixindeken/runtime
 To rebuild it, please make sure to get your `broker` and input `filePath` correct
 
 To run it in kubernetes, please make sure to get your params correct, you can run the command below:
+
 ```bash
 kubectl apply -f runtime-stateful.yaml 
 ```
 
-To deploy it, please make sure to get your params in .yaml file correct
+To deploy it, please make sure to get your params of mount and config.json in .yaml file correct

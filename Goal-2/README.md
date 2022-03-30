@@ -10,23 +10,34 @@ You can use the existed executable file if you platform matched:
 
 ```bash
 # for linux amd64 platform
-./runtime_linux_amd64 -i=input -o=output -s=reverse
+./runtime_linux_amd64 -c=/path/to/config.json
 
 # for macos intel platform
-./runtime_macos_intel -i=input -o=output -s=reverse
+./runtime_macos_intel -c=/path/to/config.json
 ```
-With input topic `input`, output topic `output` and consuming script `reverse`.
 
-To compile it, please make sure to get your `broker` and input `filePath` correct:
+The structure of config.json can refer to config.json.example:
+
+| Parameters      | Detail                                          |
+|-----------------|-------------------------------------------------|
+| broker          | pulsar url                                      |
+| input_file_path | path of message input source                    |
+| FunctionRoot    | folder of functions                             |
+| input_topic     | topic get input message                         |
+| output_topic    | topic get output message                        |
+| script          | function in functions folder to consume message |
+
+
+To compile it, you can run:
 
 ```bash
-go build -a -o runtime *.go
+CGO_ENABLED=0 go build -a -o runtime *.go
 ```
 
 When compile is done, you run it:
 
 ```bash
-./runtime -i=input -o=output -s=reverse
+./runtime -c=config.json
 ```
 
 > The input message was taken in /dev/stdin

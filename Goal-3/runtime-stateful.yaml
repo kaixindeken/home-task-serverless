@@ -26,14 +26,17 @@ spec:
           command:
             - 'sh'
             - '-c'
-            - '/root/runtime -i input -o output -s reverse'
+            - '/root/runtime -c=/path/to/config.json'
           volumeMounts:
             - mountPath: /dev2
-              name: volume-storage
+              name: input-storage
+            - mountPath: /root/config.json
+                name: dev-storage
       restartPolicy: Always
       volumes:
-        - name: volume-storage
+        - name: dev-storage
           hostPath:
             path: /dev2
-            type: Directory
-
+        - name: config-storage
+            hostPath:
+              path: /root/config.json

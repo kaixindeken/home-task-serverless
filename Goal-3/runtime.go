@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/apache/pulsar-client-go/pulsar"
 	"github.com/mkideal/cli"
@@ -12,27 +13,38 @@ import (
 	"time"
 )
 
-var (
-	broker       = "pulsar://172.17.0.2:6650"
-	filePath     = "/dev2/stdin"
-	functionRoot = "/root/functions/"
-)
+type Config struct {
+	Broker        string `json:"broker"`
+	InputFilePath string `json:"input_file_path"`
+	FunctionRoot  string `json:"function_root"`
+	InputTopic    string `json:"input_topic"`
+	OutputTopic   string `json:"output_topic"`
+	Script        string `json:"script"`
+}
+
+func ReadFile(filePath string) ([]byte, error) {
+	b, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		fmt.Println("Failed open file: ", err)
+	}
+	return b, err
+}
 
 func FileReader(filePath string, ch chan []byte) {
-	b, err := ioutil.ReadFile(filePath)
+	b, err := ReadFile(filePath)
 	if err != nil {
 		fmt.Println("Failed open file: ", err)
 	}
 	ch <- b
 }
 
-func ExecCommand(script string, payload string) *exec.Cmd {
-	return exec.Command("sh", functionRoot+script+".sh", payload)
+func ExecCommand(config Config, payload string) *exec.Cmd {
+	return exec.Command("sh", config.FunctionRoot+config.Script+".sh", payload)
 }
 
-func CreateConsumer(client pulsar.Client, topic string, script string, ch chan []byte) {
+func CreateConsumer(client pulsar.Client, config Config, ch chan []byte) {
 	consumer, err := client.Subscribe(pulsar.ConsumerOptions{
-		Topic:            topic,
+		Topic:            config.InputTopic,
 		SubscriptionName: "test",
 		Type:             pulsar.Shared,
 	})
@@ -44,7 +56,7 @@ func CreateConsumer(client pulsar.Client, topic string, script string, ch chan [
 	if err != nil {
 		log.Fatal(err)
 	}
-	cmd := ExecCommand(script, string(msg.Payload()))
+	cmd := ExecCommand(config, string(msg.Payload()))
 	message, err := cmd.Output()
 	if err != nil {
 		fmt.Println("Failed to execute bash script: ", err)
@@ -66,8 +78,8 @@ func CreateProducer(client pulsar.Client, topic string, ch chan []byte) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	payload := <-ch
+	fmt.Println("stop here")
 	_, err = producer.Send(context.Background(), &pulsar.ProducerMessage{
 		Payload: payload,
 	})
@@ -82,35 +94,40 @@ func CreateProducer(client pulsar.Client, topic string, ch chan []byte) {
 
 type argT struct {
 	cli.Helper
-	InputTopic  string `cli:"i, input-topic"  usage:"please define input topic"`
-	OutputTopic string `cli:"o, output-topic" usage:"please define output topic"`
-	Script      string `cli:"s, script"       usage:"please define script function"`
+	Config string `cli:"c, config"  usage:"please appoint config path"`
 }
 
 func main() {
-	client, err := pulsar.NewClient(pulsar.ClientOptions{
-		URL:               broker,
-		OperationTimeout:  30 * time.Second,
-		ConnectionTimeout: 30 * time.Second,
-	})
-	if err != nil {
-		log.Fatalf("Could not instantiate Pulsar client: %v", err)
-	}
-	defer client.Close()
-
+	config := Config{}
 	os.Exit(cli.Run(new(argT), func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*argT)
+		b, err := ReadFile(argv.Config)
+		if err != nil {
+			fmt.Println("Failed read config: ", err)
+		}
+		err = json.Unmarshal(b, &config)
+		if err != nil {
+			fmt.Println("Failed decode config: ", err)
+		}
+		client, err := pulsar.NewClient(pulsar.ClientOptions{
+			URL:               config.Broker,
+			OperationTimeout:  30 * time.Second,
+			ConnectionTimeout: 30 * time.Second,
+		})
+		if err != nil {
+			log.Fatalf("Could not instantiate Pulsar client: %v", err)
+		}
+		defer client.Close()
 		fileProCh := make(chan []byte)
 		conProCh := make(chan []byte)
-		go FileReader(filePath, fileProCh)
+		go FileReader(config.InputFilePath, fileProCh)
+		time.Sleep(1e9)
+		go CreateConsumer(client, config, conProCh)
 		time.Sleep(3e9)
-		go CreateConsumer(client, argv.InputTopic, argv.Script, conProCh)
+		go CreateProducer(client, config.InputTopic, fileProCh)
 		time.Sleep(3e9)
-		go CreateProducer(client, argv.InputTopic, fileProCh)
-		time.Sleep(3e9)
-		go CreateProducer(client, argv.InputTopic, conProCh)
+		go CreateProducer(client, config.OutputTopic, conProCh)
 		time.Sleep(3e9)
 		return nil
 	}))
-
 }
